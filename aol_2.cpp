@@ -140,9 +140,6 @@ int displayData(Apartement listOfApartements[MAX_LINE_LENGTH]) {
     return enterToContinue();
 }
 
-
-
-
 int main() {    
     Apartement listOfApartements[MAX_LINE_LENGTH];
 
@@ -154,17 +151,32 @@ int main() {
     }
 
     // Display Menu
-    
     while (isSelect == 1)
     {
         int menuInput = displayMenu();
         switch (menuInput)
         {
+        // a. Display (15%)
+        // This function needs 1 variable: number of rows to be displayed. 
+        // This function will display data with n rows. n must be a positive integer number. 
+        // If n > total number of rows, display all data.
         case 1: displayData(listOfApartements);
+        // b.	SelectRow (20%)
+        // This function needs 2 variables as input: column and query value. 
+        // This function will display rows that have the exact value with the query. 
+        // If data is not found, print Not Found. If data is found, print data details as depicted in example below. 
+         // If multiple data exist, display all data that matched the query.
         case 2:
+        // c.	SortBy (20%)
+        // This function needs 2 variables as input: column and ascending or descending. 
+        // After data was sorted, display the first 10 data.
         case 3:
+        // d.	Export (15%)
+        // This function needs 1 variable as input: filename (string). 
+        // This function will write the data into a .csv file or comma separated- 
+        // -value (,) with user specified filename in the same directory as your program. 
         case 4:
-        case 5:
+        case 5: isSelect = 0;
         }
     }
         
