@@ -12,8 +12,6 @@
 #define FILE_NAME "file.csv"
 
 int isSelect = 1;
-
-
 typedef struct apartement {
     char firstLocation[MAX_CHAR];
     char secondLocation[MAX_CHAR];
@@ -24,16 +22,34 @@ typedef struct apartement {
     char type[MAX_CHAR];
     char furnish[MAX_CHAR];    
 } Apartement;
-
-int enterToContinue() {   
-    getchar() ;
-    printf("Press enter to continue....\n");
+// Utils
+void enterToContinue() {      
+    getchar();
+    printf("Press enter to back....");
     char enter = 0;
-    while (enter != '\r' && enter != '\n') { enter = getchar(); isSelect = 1; }
-    return 0;
+    while (enter != '\r' && enter != '\n') { 
+        enter = getchar(); 
+        isSelect = 1;         
+    }
+    printf("\e[1;1H\e[2J");
 }
-
+void showColumns() {
+    printf("----------------------------------------------------------------------------------------------------------\n");
+            printf("%-5s %-20s %-20s %-10s %-6s %-10s %-10s %-10s %-8s\n", 
+                "No",
+               "Location 1", 
+               "Location 2", 
+               "Price", 
+               "Rooms", 
+               "Bathrooms", 
+               "CarParks", 
+               "Type", 
+               "Furnish"
+            );
+            printf("----------------------------------------------------------------------------------------------------------\n");
+}
 int displayMenu() {
+
     int T;
     char listOfMenus[5][50] = {
         "Display Data",
@@ -55,24 +71,19 @@ int displayMenu() {
     
     return T;
 }
-
+// Usecases
 int readData(Apartement listOfParkings[MAX_LINE_LENGTH], char fileName[100]) {
     FILE *file = fopen(fileName, "r");  // Open the CSV file in read mode
     char line[MAX_LINE_LENGTH];
     char *token;
-
     int countParameter = 800;
     int readCount = 0;
-
     if (file == NULL) return 400;
-    
     // Read and print the header row    
     if (fgets(line, sizeof(line), file) != NULL) {                         
         do {
             token = strtok(line, ";");  // Split the line by commas
-            int column = 0;
-            
-            
+            int column = 0;            
                 while (token != NULL && readCount >= 1) {
                  char *endptr;
                     switch (column)
@@ -94,33 +105,15 @@ int readData(Apartement listOfParkings[MAX_LINE_LENGTH], char fileName[100]) {
     } else {
         return 400;
     }
-
     fclose(file);  // Close the file
     return 200;
 }
-
-int displayData(Apartement listOfApartements[MAX_LINE_LENGTH]) {    
+int fetchData(Apartement listOfApartements[MAX_LINE_LENGTH]) {    
     isSelect = 0;
-    
-    int T;
-    // Input Number of Rows
+    int T;    
     printf("Number of Rows: ");
     scanf("%d", &T);
-    
-
-    printf("----------------------------------------------------------------------------------------------------------\n");
-            printf("%-5s %-20s %-20s %-10s %-6s %-10s %-10s %-10s %-8s\n", 
-                "No",
-               "Location 1", 
-               "Location 2", 
-               "Price", 
-               "Rooms", 
-               "Bathrooms", 
-               "CarParks", 
-               "Type", 
-               "Furnish"
-            );
-            printf("----------------------------------------------------------------------------------------------------------\n");
+    showColumns();
     for (int i = 1; i < T + 1; i++)
     {
         printf("%-5d %-20s %-20s %-10.0f %-6d %-10d %-10d %-10s %-8s\n", 
@@ -135,11 +128,15 @@ int displayData(Apartement listOfApartements[MAX_LINE_LENGTH]) {
         listOfApartements[i].furnish
         );
     }    
-
-   
-    return enterToContinue();
+    enterToContinue();
+    return 1;
+}
+int selectData(Apartement listOfApartements[MAX_LINE_LENGTH]) {
+    
+    
 }
 
+// Main Module
 int main() {    
     Apartement listOfApartements[MAX_LINE_LENGTH];
 
@@ -160,13 +157,13 @@ int main() {
         // This function needs 1 variable: number of rows to be displayed. 
         // This function will display data with n rows. n must be a positive integer number. 
         // If n > total number of rows, display all data.
-        case 1: displayData(listOfApartements);
+        case 1: fetchData(listOfApartements);
         // b.	SelectRow (20%)
         // This function needs 2 variables as input: column and query value. 
         // This function will display rows that have the exact value with the query. 
         // If data is not found, print Not Found. If data is found, print data details as depicted in example below. 
          // If multiple data exist, display all data that matched the query.
-        case 2:
+        case 2: selectData(listOfApartements);
         // c.	SortBy (20%)
         // This function needs 2 variables as input: column and ascending or descending. 
         // After data was sorted, display the first 10 data.
@@ -176,7 +173,7 @@ int main() {
         // This function will write the data into a .csv file or comma separated- 
         // -value (,) with user specified filename in the same directory as your program. 
         case 4:
-        case 5: isSelect = 0;
+        case 5: return 0;
         }
     }
         
